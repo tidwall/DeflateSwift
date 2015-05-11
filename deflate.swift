@@ -9,7 +9,7 @@
 *
 */
 
-import Darwin
+import GoSwift
 
 public class ZStream {
     private struct z_stream {
