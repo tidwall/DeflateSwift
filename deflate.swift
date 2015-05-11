@@ -127,16 +127,16 @@ public class ZStream {
 }
 
 public class DeflateStream : ZStream {
-    convenience init(level : Int){
+    convenience public init(level : Int){
         self.init()
         self.level = CInt(level)
     }
-    convenience init(windowBits: Int){
+    convenience public init(windowBits: Int){
         self.init()
         self.init2 = true
         self.windowBits = CInt(windowBits)
     }
-    convenience init(level : Int, windowBits: Int){
+    convenience public init(level : Int, windowBits: Int){
         self.init()
         self.init2 = true
         self.level = CInt(level)
@@ -145,11 +145,11 @@ public class DeflateStream : ZStream {
 }
 
 public class InflateStream : ZStream {
-    override init(){
+    override public init(){
         super.init()
         deflater = false
     }
-    convenience init(windowBits: Int){
+    convenience public init(windowBits: Int){
         self.init()
         self.init2 = true
         self.windowBits = CInt(windowBits)
