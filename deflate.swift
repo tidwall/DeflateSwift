@@ -9,7 +9,7 @@
 *
 */
 
-import GoSwift
+import Foundation
 
 public class ZStream {
     private struct z_stream {
@@ -46,19 +46,21 @@ public class ZStream {
     private static var c_version : COpaquePointer = ZStream.zlibVersion()
     private(set) static var version : String = String(format: "%s", locale: nil, c_version)
     
-    private func makeError(res : CInt) -> Error? {
+    private func makeError(res : CInt) -> NSError? {
+        var err = ""
         switch res {
         case 0: return nil
-        case 1: return Error(error: "stream end")
-        case 2: return Error(error: "need dict")
-        case -1: return Error(error: "errno")
-        case -2: return Error(error: "stream error")
-        case -3: return Error(error: "data error")
-        case -4: return Error(error: "mem error")
-        case -5: return Error(error: "buf error")
-        case -6: return Error(error: "version error")
-        default: return Error(error: "undefined error")
+        case 1: err = "stream end"
+        case 2: err = "need dict"
+        case -1: err = "errno"
+        case -2: err = "stream error"
+        case -3: err = "data error"
+        case -4: err = "mem error"
+        case -5: err = "buf error"
+        case -6: err = "version error"
+        default: err = "undefined error"
         }
+        return NSError(domain: "deflateswift", code: -1, userInfo: [NSLocalizedDescriptionKey:err])
     }
     
     private var strm = z_stream()
@@ -68,7 +70,7 @@ public class ZStream {
     private var level = CInt(-1)
     private var windowBits = CInt(15)
     private var out = [UInt8](count: 5000, repeatedValue: 0)
-    func write(var bytes : [UInt8], flush: Bool) -> (bytes: [UInt8], err: Error?){
+    func write(var bytes : [UInt8], flush: Bool) -> (bytes: [UInt8], err: NSError?){
         var res : CInt
         if !initd {
             if deflater {
@@ -109,7 +111,7 @@ public class ZStream {
             }
         } while (strm.avail_out == 0)
         if strm.avail_in != 0 {
-            return ([UInt8](), Error(error: "library error: all input must be used"))
+            return ([UInt8](), makeError(-9999))
         }
         return (result, nil)
     }
