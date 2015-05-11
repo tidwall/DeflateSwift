@@ -25,27 +25,24 @@ The `import DeflateSwift` directive is required in order to access DeflateSwift 
 ##Example
 
 ```swift
+import DeflateSwift
 
-  var data : [UInt8] = [ /* some data here */ ]
+var data : [UInt8] = [ /* some data here */ ]
 
-  // compress
-  var deflater = DeflateStream()
-  var (deflated, err) = deflater.write(data, flush: true)
-  if err != nil{
-    fatalError("\(err!)")
-  }
-  
-  // decompress
-  ver inflater = InflateStream()
-  var (inflated, err) = inflater.write(deflated, flush: true)
-  if err != nil{
-    fatalError("\(err!)")
-  }
-  println("success: \(inflated == data)")
-  
-  
+// compress
+var deflater = DeflateStream()
+var (deflated, err) = deflater.write(data, flush: true)
+if err != nil{
+  fatalError("\(err!)")
 }
 
+// decompress
+ver inflater = InflateStream()
+var (inflated, err) = inflater.write(deflated, flush: true)
+if err != nil{
+  fatalError("\(err!)")
+}
+println("success: \(inflated == data)")
 ```
 
 ##Contact
