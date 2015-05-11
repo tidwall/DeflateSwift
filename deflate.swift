@@ -70,7 +70,8 @@ public class ZStream {
     private var level = CInt(-1)
     private var windowBits = CInt(15)
     private var out = [UInt8](count: 5000, repeatedValue: 0)
-    func write(var bytes : [UInt8], flush: Bool) -> (bytes: [UInt8], err: NSError?){
+    public init() { }
+    public func write(var bytes : [UInt8], flush: Bool) -> (bytes: [UInt8], err: NSError?){
         var res : CInt
         if !initd {
             if deflater {
