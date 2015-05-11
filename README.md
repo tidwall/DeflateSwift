@@ -37,7 +37,7 @@ if err != nil{
 }
 
 // decompress
-ver inflater = InflateStream()
+var inflater = InflateStream()
 var (inflated, err) = inflater.write(deflated, flush: true)
 if err != nil{
   fatalError("\(err!)")
