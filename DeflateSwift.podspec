@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
   s.source_files          = "deflate.swift"
   s.requires_arc          = true
   s.libraries             = 'z'
-  s.dependency            'GoSwift', '~> 0.0.2'
+  s.dependency            'GoSwift', '~> 0.0.3'
 end
