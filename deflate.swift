@@ -76,15 +76,15 @@ public class ZStream {
         if !initd {
             if deflater {
                 if init2 {
-                    res = deflateInit2(&strm, level: level, method: 8, windowBits: windowBits, memLevel: 8, strategy: 0, version: ZStream.c_version, stream_size: 112)
+                    res = deflateInit2(&strm, level: level, method: 8, windowBits: windowBits, memLevel: 8, strategy: 0, version: ZStream.c_version, stream_size: CInt(sizeof(z_stream)))
                 } else {
-                    res = deflateInit(&strm, level: level, version: ZStream.c_version, stream_size: 112)
+                    res = deflateInit(&strm, level: level, version: ZStream.c_version, stream_size: CInt(sizeof(z_stream)))
                 }
             } else {
                 if init2 {
-                    res = inflateInit2(&strm, windowBits: windowBits, version: ZStream.c_version, stream_size: 112)
+                    res = inflateInit2(&strm, windowBits: windowBits, version: ZStream.c_version, stream_size: CInt(sizeof(z_stream)))
                 } else {
-                    res = inflateInit(&strm, version: ZStream.c_version, stream_size: 112)
+                    res = inflateInit(&strm, version: ZStream.c_version, stream_size: CInt(sizeof(z_stream)))
                 }
             }
             if res != 0{
@@ -95,7 +95,7 @@ public class ZStream {
         var result = [UInt8]()
         strm.avail_in = CUnsignedInt(bytes.count)
         strm.next_in = &bytes+0
-        do {
+        repeat {
             strm.avail_out = CUnsignedInt(out.count)
             strm.next_out = &out+0
             if deflater {
