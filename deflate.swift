@@ -103,14 +103,14 @@ public class ZStream {
             } else {
                 res = inflate(&strm, flush: flush ? 1 : 0)
             }
-            if res != 0 {
+            if res < 0 {
                 return ([UInt8](), makeError(res))
             }
             let have = out.count - Int(strm.avail_out)
             if have > 0 {
                 result += Array(out[0...have-1])
             }
-        } while (strm.avail_out == 0)
+        } while (strm.avail_out == 0 && res != 1)
         if strm.avail_in != 0 {
             return ([UInt8](), makeError(-9999))
         }
