@@ -14,7 +14,7 @@ import zlib
 
 class ZStream {
     
-    fileprivate static var c_version : UnsafePointer<Int8> = zlibVersion()//ZStream.zlibVersion()
+    fileprivate static var c_version : UnsafePointer<Int8> = zlibVersion()
     fileprivate(set) static var version : String = String(format: "%s", locale: nil, c_version)
     
     fileprivate func makeError(_ res : CInt) -> NSError? {
@@ -41,8 +41,10 @@ class ZStream {
     fileprivate var level = CInt(-1)
     fileprivate var windowBits = CInt(15)
     fileprivate var out = [UInt8](repeating: 0, count: 5000)
+
     init() { }
-    func write(_ bytes : [UInt8], flush: Bool) -> (bytes: [UInt8], err: NSError?){
+
+    func write(_ bytes : [UInt8], flush: Bool) -> (bytes: [UInt8], err: NSError?) {
         var mutBytes = bytes
         var res : CInt
         if !initd {
@@ -88,28 +90,31 @@ class ZStream {
         }
         return (result, nil)
     }
-    deinit{
-        if initd{
-            if deflater {
-                _ = deflateEnd(&strm)
-            } else {
-                _ = inflateEnd(&strm)
-            }
+    deinit {
+        guard initd  else { return }
+
+        if deflater {
+            _ = deflateEnd(&strm)
+        } else {
+            _ = inflateEnd(&strm)
         }
     }
 }
 
 class DeflateStream : ZStream {
-    convenience init(level : Int){
+
+    convenience init(level : Int) {
         self.init()
         self.level = CInt(level)
     }
-    convenience init(windowBits: Int){
+
+    convenience init(windowBits: Int) {
         self.init()
         self.init2 = true
         self.windowBits = CInt(windowBits)
     }
-    convenience init(level : Int, windowBits: Int){
+
+    convenience init(level : Int, windowBits: Int) {
         self.init()
         self.init2 = true
         self.level = CInt(level)
@@ -118,11 +123,11 @@ class DeflateStream : ZStream {
 }
 
 class InflateStream : ZStream {
-    override init(){
+    override init() {
         super.init()
         deflater = false
     }
-    convenience init(windowBits: Int){
+    convenience init(windowBits: Int) {
         self.init()
         self.init2 = true
         self.windowBits = CInt(windowBits)
